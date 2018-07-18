@@ -1,0 +1,6 @@
+class ReverseJournal
+{
+    LedgerJournalTable          ledgerJournalTableOld;
+    LedgerJournalEngine_Daily   ledgerJournalEngine;
+    AxLedgerJournalTable        header;
+}
