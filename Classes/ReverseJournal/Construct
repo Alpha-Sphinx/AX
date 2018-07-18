@@ -1,0 +1,6 @@
+public static ReverseJournal construct()
+{
+    BULLReverseJournal reverseJournal = new BULLReverseJournal();
+
+    return reverseJournal;
+}
