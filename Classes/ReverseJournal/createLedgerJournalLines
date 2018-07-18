@@ -1,0 +1,55 @@
+public void createLedgerJournalLines()
+{
+    LedgerJournalTrans          ledgerJournalTransOld;
+    LedgerJournalTrans          ledgerJournalTrans;
+    LedgerJournalTrans_Asset    ledgerJournalTrans_Asset;
+
+    while select ledgerJournalTransOld
+        where ledgerJournalTransOld.JournalNum == ledgerJournalTableOld.JournalNum
+    {
+        ledgerJournalEngine.initValue(ledgerJournalTrans);
+
+        ledgerJournalTrans.Company          = ledgerJournalTransOld.Company;
+        ledgerJournalEngine.companyModified(ledgerJournalTrans, ledgerJournalTrans_Asset);
+        ledgerJournalTrans.LedgerDimension  = ledgerJournalTransOld.LedgerDimension;
+        ledgerJournalEngine.accountModified(ledgerJournalTrans);
+        ledgerJournalTrans.AccountType      = ledgerJournalTransOld.AccountType;
+
+        ledgerJournalTrans.OffsetCompany    = ledgerJournalTransOld.OffsetCompany;
+        ledgerJournalEngine.offsetCompanyModified(ledgerJournalTrans, ledgerJournalTrans_Asset);
+        ledgerJournalTrans.OffsetLedgerDimension = ledgerJournalTransOld.OffsetLedgerDimension;
+        ledgerJournalEngine.offsetAccountModified(ledgerJournalTrans);
+        ledgerJournalTrans.OffsetAccountType = ledgerJournalTransOld.OffsetAccountType;
+
+        ledgerJournalTrans.AmountCurCredit      = ledgerJournalTransOld.AmountCurDebit;
+        ledgerJournalEngine.amountCurCreditModified(ledgerJournalTrans);
+        ledgerJournalTrans.AmountCurDebit       = ledgerJournalTransOld.AmountCurCredit;
+        ledgerJournalEngine.amountCurDebitModified(ledgerJournalTrans);
+
+        ledgerJournalTrans.CurrencyCode         = ledgerJournalTransOld.CurrencyCode;
+        ledgerJournalEngine.currencyModified(ledgerJournalTrans);
+
+        ledgerJournalTrans.Invoice              = ledgerJournalTransOld.Invoice;
+        ledgerJournalTrans.DocumentNum          = ledgerJournalTransOld.DocumentNum;
+        ledgerJournalTrans.PaymMode             = ledgerJournalTransOld.PaymMode;
+
+        ledgerJournalTrans.MandatAttachedRecId  = ledgerJournalTransOld.MandatAttachedRecId;
+        ledgerJournalTrans.TitreAttachedRecId   = ledgerJournalTransOld.TitreAttachedRecId;
+        ledgerJournalTrans.EncaissAttachedRecId = ledgerJournalTransOld.EncaissAttachedRecId;
+        ledgerJournalTrans.EngagAttachedRecId   = ledgerJournalTransOld.EngagAttachedRecId;
+
+        ledgerJournalTrans.ForeignCompany       = ledgerJournalTransOld.Company;
+        ledgerJournalTrans.ForeignVoucher       = ledgerJournalTransOld.Voucher;
+
+        ledgerJournalTrans.DefaultDimension     = ledgerJournalTransOld.DefaultDimension;
+        ledgerJournalTrans.Txt                  = ledgerJournalTransOld.Txt;
+        ledgerJournalTrans.PostingProfile       = ledgerJournalTransOld.PostingProfile;
+        ledgerJournalTrans.SettleVoucher        = ledgerJournalTransOld.SettleVoucher;
+
+        ledgerJournalEngine.write(ledgerJournalTrans);
+        ledgerJournalTrans.insert();
+
+    }
+
+    info(strFmt("journal Num : %1", header.ledgerJournalTable().JournalNum));
+}
