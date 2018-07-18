@@ -1,0 +1,28 @@
+public LedgerJournalTable createLedgerJournalHeader()
+{
+    LedgerJournalTable      ledgerJournalTable;
+
+    ledgerJournalEngine = LedgerJournalEngine::construct(ledgerJournalTableOld.JournalType);
+
+    //create journal header
+    header = AxLedgerJournalTable::newLedgerJournalTable(ledgerJournalTable);
+    header.parmJournalName(ledgerJournalTableOld.JournalName);
+    header.ledgerJournalTable().initFromLedgerJournalName();
+    //header.parmOriginalCompany(ledgerJournalTableOld.company());
+    //header.parmOriginalJournalNum(ledgerJournalTableOld.JournalNum);
+    header.parmDefaultDimension(ledgerJournalTableOld.DefaultDimension);
+    header.parmName(ledgerJournalTableOld.Name + " / " + "@SYS54594");
+    header.parmOffsetAccountType(ledgerJournalTableOld.OffsetAccountType);
+    header.parmOffsetLedgerDimension(ledgerJournalTableOld.OffsetLedgerDimension);
+    header.parmCurrencyCode(ledgerJournalTableOld.CurrencyCode);
+    header.parmFixedExchRate(ledgerJournalTableOld.FixedExchRate);
+    header.parmExchRate(ledgerJournalTableOld.ExchRate);
+    header.parmExchrateSecondary(ledgerJournalTableOld.ExchrateSecondary);
+    header.parmLedgerJournalInclTax(ledgerJournalTableOld.LedgerJournalInclTax);
+    header.save();
+    ledgerJournalEngine.newJournalActive(ledgerJournalTable);
+
+    this.createLedgerJournalLines();
+
+    return ledgerJournalTable;
+}
