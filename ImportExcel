@@ -1,0 +1,71 @@
+static void AAEExcelImport(Args _args)
+{
+    Dialog                          dialog;
+    DialogField                     dialogFileName;
+    Filename                        filename;
+    SysOperationProgress            simpleProgress;
+    Container                       filterCriteria;
+    SysExcelApplication             application;
+    SysExcelWorkbooks               workbooks;
+    SysExcelWorkbook                workbook;
+    SysExcelWorksheets              worksheets;
+    SysExcelWorksheet               worksheet;
+    SysExcelCells                   cells;
+    SysExcelCell                    cell;
+    COMVariantType                  type;
+    int                             row = 1;
+    NomenclatureActivityAmount      nomenclatureActivityAmount;
+
+    #File
+    #avifiles
+
+    application = SysExcelApplication::construct();
+    workbooks = application.workbooks();
+
+    dialog = new Dialog("Importing Excel File");
+    dialogFileName = dialog.addField(extendedTypeStr(Filenameopen), "File Name");
+    filterCriteria = ['*.xls'];
+    filterCriteria = dialog.filenameLookupFilter(filterCriteria);
+    dialog.run();
+
+    if (dialog.run())
+    {
+        filename = dialogFileName.value();
+
+        try
+        {
+            workbooks.open(filename);
+        }
+        catch (Exception::Error)
+        {
+            throw error(strFmt("File cannot be opened."));
+        }
+
+        workbook    = workbooks.item(1);
+        worksheets  = workbook.worksheets();
+        worksheet   = worksheets.itemFromNum(1);
+        cells       = worksheet.cells();
+
+        try
+        {
+            do
+            {
+                row++;
+                nomenclatureActivityAmount.clear();
+                nomenclatureActivityAmount.ActivityCode = cells.item(row, 1).value().bStr();//any2str(cells.item(row, 1).value().toString());
+                nomenclatureActivityAmount.Description  = cells.item(row, 2).value().bStr();
+                nomenclatureActivityAmount.insert();
+
+                type = cells.item(row + 1, 1).value().variantType();
+            }
+             while (type != COMVariantType::VT_EMPTY);
+        }
+        catch
+        {
+            throw error("Error while importing data!");
+        }
+
+        info(strFmt("file imported successfully"));
+        application.quit();
+    }
+}
