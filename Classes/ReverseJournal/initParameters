@@ -1,0 +1,4 @@
+private void initParameters(LedgerJournalTable _ledgerJournalTable)
+{
+    ledgerJournalTableOld   = _ledgerJournalTable;
+}
