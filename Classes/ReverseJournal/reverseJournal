@@ -1,0 +1,16 @@
+public static LedgerJournalTable reverseJournal(LedgerJournalTable _ledgerJournalTable)
+{
+    LedgerJournalTable      ledgerJournalTable;
+
+    ReverseJournal    reverseJournal = ReverseJournal::construct();
+
+    reverseJournal.initParameters(_ledgerJournalTable);
+
+    ttsBegin;
+
+    ledgerJournalTable = reverseJournal.createLedgerJournalHeader();
+
+    ttsCommit;
+
+    return ledgerJournalTable;
+}
